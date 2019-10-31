@@ -1,5 +1,5 @@
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -21,7 +21,6 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -32,20 +31,52 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
-
 #
 # Main
 #
 
-# Make a new player object that is currently in the 'outside' room.
+def getPlayer():
+    nameInput = input("Set your character's name: ")
+    global myplayer
+    myplayer = Player(nameInput, room['outside'])
+    print(myplayer.current_room)
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+def move():
+    global moveInput
+    moveInput = input("Enter directional command: ")
+    game(moveInput)
+
+def game(mInput):
+    if mInput == 'n':
+        x = getattr(myplayer.current_room, "n_to", "can't go that way")
+        myplayer.current_room = x
+        print(myplayer.current_room)
+        move()
+    
+    elif mInput == 'e':
+        x = getattr(myplayer.current_room, "e_to", "can't go that way")
+        myplayer.current_room = x
+        print(myplayer.current_room)
+        move()
+    
+    elif mInput == 's':
+        x = getattr(myplayer.current_room, "s_to", "can't go that way")
+        myplayer.current_room = x
+        print(myplayer.current_room)
+        move()
+    
+    elif mInput == 'w':
+        x = getattr(myplayer.current_room, "w_to", "can't go that way")
+        myplayer.current_room = x
+        print(myplayer.current_room)
+        move()
+    
+    elif mInput == 'q':
+        exit
+    else:
+        print("Invalid key")
+        move()
+
+getPlayer()
+move()
+game(moveInput)
