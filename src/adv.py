@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+import re
 # Declare all the rooms
 
 room = {
@@ -34,49 +35,35 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
+def get_player():
+    name_input = input("Set your character's name: ")
+    global my_player
+    my_player = Player(name_input, room['outside'])
+    print(my_player.current_room)
 
-def getPlayer():
-    nameInput = input("Set your character's name: ")
-    global myplayer
-    myplayer = Player(nameInput, room['outside'])
-    print(myplayer.current_room)
+def get_input():
+    global move_input
+    move_input = input("Enter directional command: ")
+    game(move_input)
 
-def move():
-    global moveInput
-    moveInput = input("Enter directional command: ")
-    game(moveInput)
+def move(dir):
+    x = getattr(my_player.current_room, str(dir), "can't go that way")
+    my_player.current_room = x
+    print(my_player.current_room)
+    get_input()
 
-def game(mInput):
-    if mInput == 'n':
-        x = getattr(myplayer.current_room, "n_to", "can't go that way")
-        myplayer.current_room = x
-        print(myplayer.current_room)
-        move()
-    
-    elif mInput == 'e':
-        x = getattr(myplayer.current_room, "e_to", "can't go that way")
-        myplayer.current_room = x
-        print(myplayer.current_room)
-        move()
-    
-    elif mInput == 's':
-        x = getattr(myplayer.current_room, "s_to", "can't go that way")
-        myplayer.current_room = x
-        print(myplayer.current_room)
-        move()
-    
-    elif mInput == 'w':
-        x = getattr(myplayer.current_room, "w_to", "can't go that way")
-        myplayer.current_room = x
-        print(myplayer.current_room)
-        move()
-    
-    elif mInput == 'q':
+
+def game(m_input):
+
+    if re.search("[ensw]", m_input):
+       move(f"{m_input}_to")
+
+    elif m_input == 'q':
         exit
     else:
         print("Invalid key")
-        move()
+        get_input()
 
-getPlayer()
-move()
-game(moveInput)
+get_player()
+get_input()
+game(move_input)
