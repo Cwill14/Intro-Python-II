@@ -20,6 +20,5 @@ class Room:
     def add_item(self, item):
         self.room_items.append(item)
     def remove_item(self, item):
-        print(self.room_items)
         self.room_items.remove(item)
         
