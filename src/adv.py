@@ -10,7 +10,7 @@ room = {
                      "North of you, the cave mount beckons"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east.""", [Item("Sword", "an ancient weapon, but still sharp")]),
+passages run north and east.""", [Item("sword", "an ancient weapon, but still sharp")]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -62,40 +62,33 @@ def move(dir):
     x = getattr(my_player.current_room, str(dir), "can't go that way")
     if x == "can't go that way":
         print(x)
-        get_input();
+        get_input()
     else:
         my_player.current_room = x
     print(my_player.current_room)
     get_input()
 
-def check_item(name, l):
+def loop_list(l):
     # v = [True for i in l if i.name == item]
-    answer = [(i, value) for i, value in enumerate(l) if value.name == name]
+    # print(f"name: {name}")
+    # print(f"l: {l}")
+    # answer = [ v for v in l if v == name]
+    answer = [ v for v in l]
+    print(f"list: {l}")
     print(f"answer: {answer}")
-    index = answer.i
-    print(f"index: {index}")
-    # v = dict(v)
-    # w = v
-    # print(f"w: {w}")
-    # for i in l:
 
-    return v
+    return answer
 
 def pickup(item_name):
-    room_result = check_item(item_name, my_player.current_room.room_items)
-    print(f"room_result: {room_result}")
-    print(f"room_result: {room_result[0]}")
-    print(f"room_result: {str(room_result)}")
-    print(f"room_result: {bool(room_result)}")
-    if room_result.name == item_name:
-        p_result = check_item(item_name, my_player.inventory)
-        print(f"p_result: {p_result}")
-        print(f"p_result type: {type(p_result)}")
-        print(f"type([]): {type([])}")
+    room_result = loop_list(my_player.current_room.room_items)
+    result_item = room_result[0]
 
-        if p_result == []:
-            my_player.current_room.remove_item(room_result)
-            my_player.add_to_inventory(room_result)
+    if result_item.name == item_name:
+        p_result = loop_list(my_player.inventory)
+
+        if result_item not in p_result:
+            my_player.current_room.remove_item(result_item)
+            my_player.add_to_inventory(result_item)
         else:
             print(f"You already have the {item_name}")
     else:

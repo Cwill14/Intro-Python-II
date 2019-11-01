@@ -10,7 +10,7 @@ class Player:
         return f"Player Information: \n  Name: {self.name}\n  Location: {self.current_room.name}\n  Inventory: {self.inventory}"
     
     def __repr__(self):
-        return  f"Item({repr(self.name)})"
+        return  f"Player({repr(self.name)})"
 
     def add_to_inventory(self, item):
         self.inventory.append(item)

@@ -4,6 +4,6 @@ class Item:
         self.description = description
 
     def __str__(self):
-        return f"{self.name} {self.description}"
+        return f"Name: {self.name}\n  Description: {self.description}"
     def __repr__(self):
-        return f"Name: {repr(self.name)}\n  Description: {repr(self.description)}"
+        return f"\n\tName: {repr(self.name)}\n\t Description: {repr(self.description)})\n"
