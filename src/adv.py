@@ -10,7 +10,7 @@ room = {
                      "North of you, the cave mount beckons"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east.""", [Item("sword", "an ancient weapon, but still sharp")]),
+passages run north and east.""", [Item("sword", "an ancient weapon, but still sharp"), Item('spoon', 'silver spoon')]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -46,7 +46,7 @@ def get_play_input():
 def get_player():
     name_input = input("Set your character's name: ")
     global my_player
-    my_player = Player(name_input, room['outside'], [{Item("torch", "a simple torch")}, {Item("hat", "just a hat")}])
+    my_player = Player(name_input, room['outside'], [Item("torch", "a simple torch"), Item("hat", "just a hat")])
     print("Commands:")
     print("  n, e, s, w: move north, east, south, or west\n  r: see current room\n  p: see player information\n  i: see inventory\n  q: quit\n\n")
     get_play_input()
@@ -68,25 +68,34 @@ def move(dir):
     print(my_player.current_room)
     get_input()
 
-def loop_list(l):
-    # v = [True for i in l if i.name == item]
-    # print(f"name: {name}")
-    # print(f"l: {l}")
-    # answer = [ v for v in l if v == name]
-    answer = [ v for v in l]
-    print(f"list: {l}")
-    print(f"answer: {answer}")
+# def loop_list(l):
+#     # v = [True for i in l if i.name == item]
+#     # print(f"name: {name}")
+#     # print(f"l: {l}")
+#     # answer = [ v for v in l if v == name]
+#     answer = [ v for v in l]
+#     print(f"list: {l}")
+#     print(f"answer: {answer}")
 
-    return answer
+#     return answer
 
 def pickup(item_name):
-    room_result = loop_list(my_player.current_room.room_items)
-    result_item = room_result[0]
+    # room_result = loop_list(my_player.current_room.room_items)
+    # result_item = room_result[0]
+    # items = [x for x in my_player.current_room.room_items]
+    # item = items[0]
+    # result = [item for item in my_player.current_room.room_items]
+    result = [item for item in my_player.current_room.room_items if item.name == item_name]
+    # maybe try using filter()
+    result_item = result[0]
+    print(f"result: {result}")
+    
+    print(f"result_item: {result_item}")
+
 
     if result_item.name == item_name:
-        p_result = loop_list(my_player.inventory)
 
-        if result_item not in p_result:
+        if result_item not in my_player.inventory:
             my_player.current_room.remove_item(result_item)
             my_player.add_to_inventory(result_item)
         else:
@@ -94,10 +103,27 @@ def pickup(item_name):
     else:
         print(f"{item_name} does not exist in {my_player.current_room.name}")
 
-def drop(item):
-    my_player.drop_item(item)
-    my_player.current_room(item)
-    print(f"You have dropped the {item}")
+def drop(item_name):
+    result = [item for item in my_player.inventory if item.name == item_name]
+    # result_item = [item for item in my_player.inventory]
+    result_item = result[0]
+    print(f"result: {result}")
+    print(f"result[0]: {result[0]}")
+
+    # print()
+    # if result_item.name == item_name:
+    if result_item not in my_player.inventory:
+        print(f"{item_name} does not exist in {my_player.name}'s inventory'")
+
+    else:
+        my_player.drop_item(result_item)
+        my_player.current_room.add_item(result_item)
+    # my_player.drop_item(result_item)
+    # my_player.current_room.add_item(result_item)
+
+    # my_player.drop_item(result_item)
+    # my_player.current_room(result_item)
+    print(f"You have dropped the {result_item.name}")
 
 def game(m_input):
     x = re.split("\s", m_input)
@@ -134,4 +160,5 @@ def game(m_input):
 
 get_player()
 get_input()
+my_player.current_room.add_item('spoon', 'silver spoon')
 game(move_input)
